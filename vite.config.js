@@ -9,9 +9,10 @@ export default defineConfig({
         'aws-sdk',
         'nock',
         '@mapbox/node-pre-gyp',
-        '@mui/icons-material' // Add Material-UI icons as external
+        '@mui/icons-material' // Keep Material-UI icons as external
       ],
     },
+    outDir: 'build', // Specify your output directory
   },
   resolve: {
     alias: {
@@ -19,8 +20,9 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['@mui/icons-material'], // Ensure Material-UI icons are included in dependencies
+    include: [
+      '@mui/icons-material', // Ensure Material-UI icons are included in dependencies
+    ],
   },
   plugins: [react()],
 });
-  
