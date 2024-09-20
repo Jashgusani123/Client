@@ -15,6 +15,7 @@ const ChatList = ({
   ],
   handleDeleteChat,
 }) => {
+  
   return (
     <div >
     <Stack
@@ -25,10 +26,12 @@ const ChatList = ({
     >
       {chats?.map((data, index) => {
         const { avatar, name, _id, groupChat, members } = data;
+
         const massageAlert = newMassageAlert.find(
           ({ chatId }) => chatId === _id
         );
-
+        
+        
         // Check if any member of the chat is online
         const isOnline = members?.some((member) => onlineUsers.includes(_id));
 

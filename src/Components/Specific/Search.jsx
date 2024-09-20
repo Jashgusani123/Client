@@ -1,3 +1,5 @@
+import { useInputValidation } from "6pp";
+import { Search as SearchIcon } from "@mui/icons-material";
 import {
   Dialog,
   DialogTitle,
@@ -6,29 +8,53 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useInputValidation } from "6pp";
-import { Search as SearchIcon } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import { toast } from 'react-hot-toast';
+import { useDispatch, useSelector } from "react-redux";
+import { useAsyncMutation } from "../../Hooks/hook";
+import {
+  useLazySearchUserQuery,
+  useSendFriendRequestMutation,
+} from "../../redux/api/api";
+import { setIsSearch } from "../../redux/reducers/misc";
 import UserItem from "../shared/UserItem";
-import { sempleUser } from "../../Constants/SempleChats";
+
 
 const Search = () => {
   const search = useInputValidation();
+  const dispatch = useDispatch();
 
-  let isLoadingSendFriendRequst = false;
-  const [Users, setusers] = useState(sempleUser);
+  const { isSearch } = useSelector((state) => state.misc);
 
-  const addFriendHandler = (id) => {
-    console.log(id);
+  const [searchUser] = useLazySearchUserQuery();
+  const [sendFriendRequest , isLoadingSendFriendRequst] = useAsyncMutation(useSendFriendRequestMutation);
+
+  const [Users, setusers] = useState([]);
+
+  const addFriendHandler = async(id) => {
+   await sendFriendRequest("Sending Friend Request.." , {userId:id})
   };
 
+  const searchCloseHandler = () => dispatch(setIsSearch(false));
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      searchUser(search.value)
+        .then(({ data }) => setusers(data.user))
+        .catch((err) => console.log(err));
+    }, 1000);
+    return () => {
+      clearTimeout(timeOutId);
+    };
+  }, [search.value]);
+
   return (
-    <Dialog open>
+    <Dialog open={isSearch} onClose={searchCloseHandler}>
       <Stack p={"2rem"} direction={"column"} width={"25rem"}>
         <DialogTitle textAlign={"center"}>Find People</DialogTitle>
         <TextField
           label=""
-          value={search.value}
+          value={search.value || ""}
           onChange={search.changeHandler}
           variant="outlined"
           size="small"

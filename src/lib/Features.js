@@ -13,7 +13,10 @@ const fileFormat = (url) => {
     }
 };
 
-const transformImage = (url = "", width = 100) => url;  // Corrected the function name
+const transformImage = (url = "", width = 100) => {
+    const newUrl = url.replace("upload/" , `upload/dpr_auto/w_${width}/`)
+    return newUrl;
+};  // Corrected the function name
 
 const getlast7Days = ()=>{
     const today = moment();
@@ -25,5 +28,18 @@ const getlast7Days = ()=>{
     }
     return last7Days;
 }
-
-export { fileFormat, transformImage , getlast7Days};  // Correctly export both functions
+const getOrSaveFromStorage = ({ key, value, get }) => {
+    if (get){
+        const dataIsSaveOrNot = localStorage.getItem(key);
+            
+        if(dataIsSaveOrNot == "undefined"){
+            return [];
+        }
+        if(dataIsSaveOrNot){
+            return JSON.parse(localStorage.getItem(key))
+         
+        }
+    }
+    else localStorage.setItem(key,JSON.stringify(value));    
+  };
+export { fileFormat, transformImage ,getOrSaveFromStorage, getlast7Days};  // Correctly export both functions

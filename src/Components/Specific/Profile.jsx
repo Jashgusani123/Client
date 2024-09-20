@@ -6,11 +6,14 @@ import {
   AlternateEmail as UserNameIcon,
 } from "@mui/icons-material";
 import moment from 'moment';
+import { transformImage } from "../../lib/Features";
 
-const Profile = () => {
+const Profile = ({user}) => {
+  
   return (
     <Stack spacing={"2rem"} direction={"column"} alignItems={"center"}>
       <Avatar
+      src={transformImage(user.avatar.url)}
         sx={{
           width: "200px",
           height: "200px",
@@ -20,10 +23,10 @@ const Profile = () => {
         }}
       />
       {/* '2008-01-08T18:30:00.000Z' */}
-      <ProfileCard heading={"Bio"} text={"Computer Engineering 💻📚"} />
-      <ProfileCard heading={"UserName"} text={"jashgusani91"}  icon={<UserNameIcon />}/>
-      <ProfileCard heading={"Name"} text={"Jash Gusani"} icon={<FaceIcon />}/>
-      <ProfileCard heading={"Joined"} text={moment("2008-01-08T18:30:00.000Z").fromNow()} icon={<CalendarIcon />}/>
+      <ProfileCard heading={"Bio"} text={user.bio} />
+      <ProfileCard heading={"UserName"} text={user.username || "Not Available"}  icon={<UserNameIcon />}/>
+      <ProfileCard heading={"Name"} text={user.name} icon={<FaceIcon />}/>
+      <ProfileCard heading={"Joined"} text={moment(user.createdAt).fromNow()} icon={<CalendarIcon />}/>
     </Stack>
   );
 };

@@ -1,6 +1,7 @@
 import { Avatar, IconButton, ListItem, Stack, Typography } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import React, { memo } from "react";
+import {transformImage} from '../../lib/Features.js';
 
 const UserItem = ({ user, handler, handlerLoding , isAdded = false  , styling={}}) => {
   const { name, _id, avatar } = user;
@@ -13,7 +14,7 @@ const UserItem = ({ user, handler, handlerLoding , isAdded = false  , styling={}
         width={"100%"}
         {...styling}
       >
-        <Avatar />
+        <Avatar src={avatar} />
         <Typography variant="body1" sx={{
             display:"--webkit-box" , 
             WebkitLineClamp:1,

@@ -6,11 +6,11 @@ import { fileFormat } from "../../lib/Features";  // Import correctly
 import Attachments from "./Attachments";
 
 const MassageComponents = ({ massage, user }) => {
-  const { sender, content, attachments = [], createdAt } = massage;
-
+  const { sender, content, attachments = [], createdAt  , _id} = massage;
+  
   const sameSender = sender?._id === user?._id;
   const timeAgo = moment(createdAt).fromNow();
-
+  
   return (
     <div
       style={{
