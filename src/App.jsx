@@ -1,4 +1,3 @@
-"use client"
 import React, { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectRouter from "./Components/auth/ProtectRouter";
