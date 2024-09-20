@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'; // Explicit import to avoid JSX-related issues
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
