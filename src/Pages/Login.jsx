@@ -64,7 +64,7 @@ const Login = () => {
         },
         config
       );
-      dispatch(userExists(true));
+      dispatch(userExists(data.user));
       toast.success(data.message);
     } catch (err) {
       toast.error(err.response.data.message || "Something Went Wrong");
@@ -73,7 +73,7 @@ const Login = () => {
 
   const handleSignup = async(e) => {
     e.preventDefault();
-
+    
     const formData = new FormData();
     formData.append("avatar",avatar.file)
     formData.append("name",name.value)
@@ -90,7 +90,9 @@ const Login = () => {
 
     try {
       const { data }= await axios.post(`${server}/api/v1/user/new`,formData ,config )
-      dispatch(userExists(true))
+      console.log(data);
+      
+      dispatch(userExists(data.user))
       toast.success(data.message)
     } catch (err) {
       toast.error(err.response.data.message || "Something Went Wrong");

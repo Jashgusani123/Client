@@ -34,9 +34,11 @@ const Applayout = () => (WrappedComponent) => {
     const { isLoading, isError, data, error, refetch } = useMyChatsQuery("");
 
     useErrors([{ isError, error }]);
+
     useEffect(()=>{
       getOrSaveFromStorage({key:NewMessageAlert , value:newMessagesAlert})
     },[newMessagesAlert])
+
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
       console.log("Delete Chat", _id, groupChat);
@@ -48,9 +50,11 @@ const Applayout = () => (WrappedComponent) => {
       if(data.chatId == chatId) return;
       dispatch(setNewMessagesAlert(data))
     }, [chatId]);
+
     const newRequestHandler = useCallback(() => {
       dispatch(incrementNotification());
     }, [dispatch]);
+
     const eventHandler = {
       [NewMessageAlert]: newMessageAlertHandler,
       [NewRequest]: newRequestHandler,
@@ -67,7 +71,7 @@ const Applayout = () => (WrappedComponent) => {
           <Drawer open={isMobile} onClose={handleMobile}>
             <ChatList
               w="70vw"
-              chats={data.transformedChats}
+              chats={data?.transformedChats}
               chatId={chatId}
               handleDeleteChat={handleDeleteChat}
               newMassageAlert={newMessagesAlert}
@@ -89,7 +93,7 @@ const Applayout = () => (WrappedComponent) => {
               <Skeleton />
             ) : (
               <ChatList
-                chats={data.transformedChats}
+                chats={data?.transformedChats}
                 chatId={chatId}
                 newMassageAlert={newMessagesAlert}
                 onlineUsers={["1", "2"]}

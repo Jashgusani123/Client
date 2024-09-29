@@ -77,12 +77,20 @@ const api = createApi({
         body:data
       }},
     }),
+    myGroups: builder.query({
+      query: () => ({
+        url: "chat/my/groups",
+        credentials: "include",
+      }),
+      providesTags: ["Chat"],
+    }),
   }),
 });
 
 export default api;
 export const {
   useMyChatsQuery,
+  useMyGroupsQuery,
   useChatDetailsQuery,
   useGetMessagesQuery,
   useLazySearchUserQuery,

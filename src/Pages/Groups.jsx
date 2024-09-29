@@ -25,6 +25,7 @@ import { Link } from "../Components/Styles/StyleComponents";
 import AvatarCard from "../Components/shared/AvatarCard";
 import { SempleChats, sempleUser } from "../Constants/SempleChats";
 import UserItem from "../Components/shared/UserItem";
+import { useMyGroupsQuery } from "../redux/api/api";
 
 const ConfirmDeleteDialog = lazy(() =>
   import("../Components/Dialogs/ConfirmDeleteDialog")
@@ -34,6 +35,9 @@ const isAddMember = false;
 const IsAddMember = lazy(() => import("../Components/Dialogs/AddMemberDialog"));
 const Groups = () => {
   const navigate = useNavigate();
+
+  const myGroups = useMyGroupsQuery("")
+  
   const [IsMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [groupName, setgroupName] = useState();
   const [UpdatedGroupNameValue, setUpdatedGroupNameValue] = useState("");

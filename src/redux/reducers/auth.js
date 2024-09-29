@@ -11,6 +11,8 @@ const authSlice = createSlice({
     initialState,
     reducers:{
         userExists:(state , action)=>{
+            console.log(action.payload);
+            
             state.user = action.payload
             state.loader = false
         },
