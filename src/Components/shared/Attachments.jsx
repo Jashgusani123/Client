@@ -1,6 +1,6 @@
-import React from "react";
-import { transformImage } from "../../lib/Features";  // Corrected import statement
 import { FileOpen } from "@mui/icons-material";
+import React from "react";
+import { transformImage } from "../../lib/Features"; // Corrected import statement
 
 const Attachments = ({ file, url }) => {
   switch (file) {

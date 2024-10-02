@@ -1,3 +1,9 @@
+import { useInfiniteScrollTop } from "6pp";
+import {
+  AttachFile as AttachFileIcon,
+  Send as SendIcon,
+} from "@mui/icons-material";
+import { IconButton, Skeleton, Stack } from "@mui/material";
 import React, {
   Fragment,
   useCallback,
@@ -5,18 +11,14 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Applayout from "../Components/layout/Applayout";
-import { IconButton, Skeleton, Stack } from "@mui/material";
-import { grayColor, red } from "../Constants/Color";
-import {
-  AttachFile as AttachFileIcon,
-  Send as SendIcon,
-} from "@mui/icons-material";
-import { InputBox } from "../Components/Styles/StyleComponents";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FileMenu from "../Components/Dialogs/FileMenu";
-import { sempleMassage } from "../Constants/SempleChats";
+import Applayout from "../Components/layout/Applayout";
+import { TypingLoader } from "../Components/layout/Loaders.jsx";
 import MassageComponents from "../Components/shared/MassageComponents";
-import { getSocket } from "../socket";
+import { InputBox } from "../Components/Styles/StyleComponents";
+import { grayColor, red } from "../Constants/Color";
 import {
   Alert,
   ChatJoind,
@@ -25,14 +27,11 @@ import {
   StartTyping,
   StopTyping,
 } from "../Constants/Evants.js";
-import { useChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api.js";
 import { useErrors, useSocketEvents } from "../Hooks/hook.jsx";
-import { useInfiniteScrollTop } from "6pp";
-import { useDispatch } from "react-redux";
-import { setIsFileMenu } from "../redux/reducers/misc.js";
+import { useChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api.js";
 import { removeMessageAlert } from "../redux/reducers/chat.js";
-import { TypingLoader } from "../Components/layout/Loaders.jsx";
-import { useNavigate } from "react-router-dom";
+import { setIsFileMenu } from "../redux/reducers/misc.js";
+import { getSocket } from "../socket";
 
 const Chat = ({ chatId, user }) => {
   const FileMenuRef = useRef(null);

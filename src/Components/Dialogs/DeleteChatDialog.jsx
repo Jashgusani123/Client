@@ -1,11 +1,11 @@
+import { Delete as DeleteIcon, ExitToApp as ExitToAppIcon } from "@mui/icons-material";
 import { Menu, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { setIsDeleteMenu } from "../../redux/reducers/misc";
-import { Delete as DeleteIcon, ExitToApp as ExitToAppIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAsyncMutation } from "../../Hooks/hook";
 import { useDeleteChatMutation, useLeaveGroupMutation } from "../../redux/api/api";
+import { setIsDeleteMenu } from "../../redux/reducers/misc";
 
 const DeleteChatDialog = ({ dispatch, deleteOptionAnchor }) => {
     const navigate = useNavigate()

@@ -17,7 +17,6 @@ import {
 import Moment from "moment";
 import React from "react";
 import Adminlayout from "../../Components/layout/Adminlayout";
-import { LayoutLoader } from "../../Components/layout/Loaders";
 import { DoughnutChart, LineChart } from "../../Components/Specific/Charts";
 import {
   CurveButton,

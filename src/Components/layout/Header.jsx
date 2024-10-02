@@ -1,4 +1,11 @@
-import React, { lazy, useState, Suspense } from "react";
+import {
+  Add as AddIcon,
+  Group as GroupIcon,
+  Logout as LogoutIcon,
+  Menu as MenuIcon,
+  Notifications as NotificationIcon,
+  Search as SearchIcon,
+} from "@mui/icons-material";
 import {
   AppBar,
   Backdrop,
@@ -9,28 +16,21 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  Add as AddIcon,
-  Group as GroupIcon,
-  Logout as LogoutIcon,
-  Notifications as NotificationIcon,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { red } from "../../Constants/Color";
 import axios from "axios";
-import { server } from "../../Constants/config";
+import React, { lazy, Suspense } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { red } from "../../Constants/Color";
+import { server } from "../../Constants/config";
 import { userNotExists } from "../../redux/reducers/auth";
+import { resetNotification } from "../../redux/reducers/chat";
 import {
   setIsMobile,
-  setIsSearch,
-  setIsNotification,
   setIsNewGroup,
+  setIsNotification,
+  setIsSearch,
 } from "../../redux/reducers/misc";
-import { resetNotification } from "../../redux/reducers/chat";
 // Lazy-loaded components
 const SearchDialogs = lazy(() => import("../Specific/Search"));
 const NotificationDialogs = lazy(() => import("../Specific/Notification"));

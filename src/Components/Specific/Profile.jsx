@@ -1,11 +1,11 @@
-import { Stack, Avatar, Typography } from "@mui/material";
-import React from "react";
 import {
-  Face as FaceIcon,
   CalendarMonth as CalendarIcon,
+  Face as FaceIcon,
   AlternateEmail as UserNameIcon,
 } from "@mui/icons-material";
+import { Avatar, Stack, Typography } from "@mui/material";
 import moment from 'moment';
+import React from "react";
 import { transformImage } from "../../lib/Features";
 
 const Profile = ({user}) => {
