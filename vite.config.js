@@ -9,7 +9,7 @@ export default defineConfig({
         'aws-sdk',
         'nock',
         '@mapbox/node-pre-gyp',
-        '@mui/icons-material' // Keep Material-UI icons as external
+        // Remove @mui/icons-material from here
       ],
     },
     outDir: 'build', // Specify your output directory
@@ -21,7 +21,8 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: [
-      '@mui/icons-material', // Ensure Material-UI icons are included in dependencies
+      // Keep @mui/icons-material here to ensure it gets bundled
+      '@mui/icons-material',
     ],
   },
   plugins: [react()],
