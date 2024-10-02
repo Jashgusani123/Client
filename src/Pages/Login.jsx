@@ -1,34 +1,34 @@
-
-import React, { useState } from "react";
-import {
-  Container,
-  Paper,
-  TextField,
-  Typography,
-  Button,
-  Stack,
-  Avatar,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
+import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
 import {
   CameraAlt as CameraAltIcon,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
-import { VisuallyHiddenInput } from "../Components/Styles/StyleComponents";
-import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
-import { usernameValidators } from "../utils/Validators";
-import { whitePer } from "../Constants/Color";
+import {
+  Avatar,
+  Button,
+  Container,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
-import { server } from "../Constants/config";
-import { useDispatch } from "react-redux";
-import { userExists } from "../redux/reducers/auth";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-
+import { useDispatch } from "react-redux";
+import { VisuallyHiddenInput } from "../Components/Styles/StyleComponents";
+import { whitePer } from "../Constants/Color";
+import { server } from "../Constants/config";
+import { userExists } from "../redux/reducers/auth";
+import { usernameValidators } from "../utils/Validators";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
+
   const toggleLogin = () => setIsLogin((prev) => !prev);
 
   const name = useInputValidation("");
@@ -49,6 +49,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    const toastId = toast.loading("Logging In...")
+
+    setisLoading(true);
+
     const config = {
       withCredentials: true,
       headers: {
@@ -65,40 +70,47 @@ const Login = () => {
         config
       );
       dispatch(userExists(data.user));
-      toast.success(data.message);
+      toast.success(data.message , {id:toastId});
     } catch (err) {
-      toast.error(err.response.data.message || "Something Went Wrong");
+      toast.error(err.response.data.message || "Something Went Wrong",{id:toastId});
+    } finally {
+      setisLoading(false);
     }
   };
 
-  const handleSignup = async(e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    
+    const toastId = toast.loading("Signing Up...")
+    setisLoading(true);
+
     const formData = new FormData();
-    formData.append("avatar",avatar.file)
-    formData.append("name",name.value)
-    formData.append("bio",bio.value)
-    formData.append("username",username.value)
-    formData.append("password",password.value)
+    formData.append("avatar", avatar.file);
+    formData.append("name", name.value);
+    formData.append("bio", bio.value);
+    formData.append("username", username.value);
+    formData.append("password", password.value);
 
     const config = {
-      withCredentials:true,
-      headers:{
-        "Content-Type":"multipart/form-data"
-      }
-    }
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
 
     try {
-      const { data }= await axios.post(`${server}/api/v1/user/new`,formData ,config )
-      console.log(data);
-      
-      dispatch(userExists(data.user))
-      toast.success(data.message)
+      const { data } = await axios.post(
+        `${server}/api/v1/user/new`,
+        formData,
+        config
+      );
+
+      dispatch(userExists(data.user));
+      toast.success(data.message,{id:toastId});
     } catch (err) {
-      toast.error(err.response.data.message || "Something Went Wrong");
-
+      toast.error(err.response.data.message || "Something Went Wrong" , {id:toastId});
+    } finally {
+      setisLoading(false);
     }
-
   };
 
   return (
@@ -171,6 +183,7 @@ const Login = () => {
                   color="primary"
                   type="submit"
                   sx={{ marginTop: "1rem" }}
+                  disabled={isLoading}
                 >
                   Login
                 </Button>
@@ -184,7 +197,7 @@ const Login = () => {
                 >
                   OR
                 </Typography>
-                <Button fullWidth onClick={toggleLogin}>
+                  <Button disabled={isLoading} fullWidth onClick={toggleLogin}>
                   Sign Up Instead
                 </Button>
               </form>
@@ -310,6 +323,7 @@ const Login = () => {
                   color="primary"
                   type="submit"
                   sx={{ marginTop: "1rem" }}
+                  disabled={isLoading}
                 >
                   Sign Up
                 </Button>
@@ -323,7 +337,7 @@ const Login = () => {
                 >
                   OR
                 </Typography>
-                <Button fullWidth onClick={toggleLogin}>
+                <Button disabled={isLoading} fullWidth onClick={toggleLogin}>
                   Login Instead
                 </Button>
               </form>

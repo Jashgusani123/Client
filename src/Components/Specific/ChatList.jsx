@@ -32,9 +32,9 @@ const ChatList = ({
         );
         
         
-        // Check if any member of the chat is online
-        const isOnline = members?.some((member) => onlineUsers.includes(_id));
-
+        // Check if any mem ber of the chat is online
+        const isOnline = members?.some((member) => onlineUsers.includes(member));
+        
         return (
           <ChatItem
             newMassageAlert={massageAlert}

@@ -1,27 +1,42 @@
 import { useInputValidation } from "6pp";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, Container, IconButton, InputAdornment, Paper, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Button,
+  Container,
+  IconButton,
+  InputAdornment,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { whitePer } from "../../Constants/Color";
-
-
-const isAdmin = true
+import { adminLogin, getAdmin } from "../../redux/Thunks/admin";
 
 const AdminLogin = () => {
-  const secretKey = useInputValidation();
-  
-  // State to toggle password visibility
+  const { isAdmin } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const secretKey = useInputValidation("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Toggle the password visibility
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(adminLogin(secretKey.value));
+  };
+
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
-  // Prevent the default action when mouse is down on the icon button
   const handleMouseDownPassword = (event) => event.preventDefault();
 
-  if(isAdmin){
-  return  <Navigate to="/admin/dashboard"/>
+  useEffect(()=>{
+    dispatch(getAdmin())
+    
+  },[dispatch])
+
+  if (isAdmin) {
+    return <Navigate to="/admin/dashboard" />;
   }
 
   return (
@@ -50,12 +65,12 @@ const AdminLogin = () => {
           }}
         >
           <Typography>Admin Dashboard</Typography>
-          <form>
+          <form onSubmit={submitHandler}>
             <TextField
               required
               fullWidth
               label="Secret Key"
-              type={showPassword ? "text" : "password"}  // Toggle between text and password
+              type={showPassword ? "text" : "password"} // Toggle between text and password
               margin="normal"
               variant="outlined"
               value={secretKey.value}

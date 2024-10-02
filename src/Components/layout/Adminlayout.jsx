@@ -1,25 +1,27 @@
 import {
-    Close as CloseIcon,
-    Dashboard as DashboardIcon,
-    ExitToApp as ExitToAppIcon,
-    Group as GroupIcon,
-    ManageAccounts as ManageAccountsIcon,
-    Menu as MenuIcon,
-    Message as MessageIcon,
+  Close as CloseIcon,
+  Dashboard as DashboardIcon,
+  ExitToApp as ExitToAppIcon,
+  Group as GroupIcon,
+  ManageAccounts as ManageAccountsIcon,
+  Menu as MenuIcon,
+  Message as MessageIcon,
 } from "@mui/icons-material";
 import {
-    Box,
-    Drawer,
-    Grid,
-    IconButton,
-    Stack,
-    styled,
-    Tooltip,
-    Typography,
+  Box,
+  Drawer,
+  Grid,
+  IconButton,
+  Stack,
+  styled,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link as LinkComponent, Navigate, useLocation } from "react-router-dom";
 import { grayColor, matBlack } from "../../Constants/Color";
+import { adminLogout } from "../../redux/Thunks/admin";
 
 const Link = styled(LinkComponent)`
     text-decoration:none;
@@ -54,10 +56,14 @@ const Admintab = [
       icon: <MessageIcon />,
     },
   ];
-  const logoutHandler =()=>{}
   
   const Sidebar = ({ w }) => {
+    const dispatch = useDispatch()
     const Location = useLocation();
+
+    const logoutHandler =()=>{
+      dispatch(adminLogout())
+    }
   
     return (
       <Stack width={w} spacing={"3rem"} direction={"column"} p={"3rem"}>
@@ -98,9 +104,10 @@ const Admintab = [
     );
   };
 
-  const isAdmin = true
    
 const Adminlayout = ({ children }) => {
+  const {isAdmin} = useSelector(state=>state.auth)
+
   const [isMobile, setisMobile] = useState(false);
   const handleMobile = () => {
     setisMobile(!isMobile);

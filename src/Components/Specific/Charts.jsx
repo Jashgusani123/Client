@@ -36,19 +36,7 @@ const lineChartOption = {
       display: false,
     },
   },
-//   scales:{
-//     x:{
-//         grid:{
-//             display:false,
-//         },
-//     },
-//     y:{
-//         beginAtZero:true,
-//         grid:{
-//             display:false,
-//         }
-//     },
-//   },
+
 };
 const label = getlast7Days()
 const LineChart = ({value=[]}) => {
@@ -56,7 +44,7 @@ const LineChart = ({value=[]}) => {
     labels: label,
     datasets: [{
        data: value,
-       label:"Revenue",
+       label:"Messages",
        fill:true,
        backgroundColor:PerperLight,
        borderColor:Perper

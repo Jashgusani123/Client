@@ -4,6 +4,7 @@ import { LightBlue } from "../../Constants/Color";
 import moment from "moment";
 import { fileFormat } from "../../lib/Features";  // Import correctly
 import Attachments from "./Attachments";
+import {motion} from 'framer-motion';
 
 const MassageComponents = ({ massage, user }) => {
   const { sender, content, attachments = [], createdAt  , _id} = massage;
@@ -12,7 +13,9 @@ const MassageComponents = ({ massage, user }) => {
   const timeAgo = moment(createdAt).fromNow();
   
   return (
-    <div
+    <motion.div
+    initial={{opacity:0 , x:"-100%"}}
+    whileInView={{opacity:1, x:0}}
       style={{
         alignSelf: sameSender ? "flex-end" : "flex-start",
         backgroundColor: "white",
@@ -46,7 +49,7 @@ const MassageComponents = ({ massage, user }) => {
       <Typography variant="caption" color={"GrayText"}>
         {timeAgo}
       </Typography>
-    </div>
+    </motion.div>
   );
 };
 

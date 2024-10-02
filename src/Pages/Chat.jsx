@@ -19,6 +19,8 @@ import MassageComponents from "../Components/shared/MassageComponents";
 import { getSocket } from "../socket";
 import {
   Alert,
+  ChatJoind,
+  ChatLeaved,
   newMessage,
   StartTyping,
   StopTyping,
@@ -30,6 +32,7 @@ import { useDispatch } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc.js";
 import { removeMessageAlert } from "../redux/reducers/chat.js";
 import { TypingLoader } from "../Components/layout/Loaders.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Chat = ({ chatId, user }) => {
   const FileMenuRef = useRef(null);
@@ -37,6 +40,7 @@ const Chat = ({ chatId, user }) => {
   const bottomRef = useRef(null);
   const TypingTimeOut = useRef(null);
 
+  const navigate = useNavigate()
   const socket = getSocket();
   const dispatch = useDispatch();
 
@@ -74,12 +78,14 @@ const Chat = ({ chatId, user }) => {
   };
 
   useEffect(() => {
+    socket.emit(ChatJoind , {userId:user._id , members})
     dispatch(removeMessageAlert(chatId));
     return () => {
       setmessage("");
       setmessages([]);
       setpage(1);
       setOldMessages([]);
+      socket.emit(ChatLeaved , {userId:user._id , members})
     };
   }, [chatId]);
 
@@ -87,6 +93,12 @@ const Chat = ({ chatId, user }) => {
     if (bottomRef.current)
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    if(chatDetails.isError){
+      return navigate("/")
+    }
+  }, []);
 
   const newMessageListener = useCallback(
     (data) => {
@@ -112,8 +124,9 @@ const Chat = ({ chatId, user }) => {
   );
   const alertListener = useCallback(
     (data) => {
+      if(data.chatId !== chatId)return ;
       const messageForAlert = {
-        content: data,
+        content: data.message,
         sender: {
           _id: "kkljlljlilpkl",
           name: "Admin",

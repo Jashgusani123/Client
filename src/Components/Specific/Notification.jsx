@@ -9,32 +9,22 @@ import {
   Typography,
 } from "@mui/material";
 import React, { memo } from "react";
-import { sempleNotification } from "../../Constants/SempleChats";
-import { useAcceptFriendrequestMutation, useGetNotificationQuery } from "../../redux/api/api";
-import { useErrors } from "../../Hooks/hook";
 import { useDispatch, useSelector } from "react-redux";
+import { useAsyncMutation, useErrors } from "../../Hooks/hook";
+import { useAcceptFriendrequestMutation, useGetNotificationQuery } from "../../redux/api/api";
 import { setIsNotification } from "../../redux/reducers/misc";
-import toast from "react-hot-toast";
 
 const Notification = () => {
   const { isLoading, data, error, isError } = useGetNotificationQuery();
   const { isNotification } = useSelector((state) => state.misc);
   const dispatch = useDispatch();
 
-  const [acceptRequest] = useAcceptFriendrequestMutation()
+  const [acceptRequest] = useAsyncMutation(useAcceptFriendrequestMutation)
   
   const FriendRequstHandler = async({ _id, accept }) => {
     dispatch(setIsNotification(false))
-    try {
-    const res  = await acceptRequest({requestId:_id , accept})
-    if(res.data.success){
-      toast.success(res.data.message)
-    }else{
-      toast.error(res.data.error || "Something Went Wrong")
-    }
-    } catch (err) {
-      toast.error("Something Went Wrong")
-    }
+    await acceptRequest("Accepting..." , {requestId:_id,accept})
+    
   };
 
   const CloseHandler = () => dispatch(setIsNotification(false));

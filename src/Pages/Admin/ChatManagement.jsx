@@ -1,9 +1,11 @@
-import { Avatar, Stack } from "@mui/material";
+import { useFetchData } from "6pp";
+import { Avatar, Skeleton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Adminlayout from "../../Components/layout/Adminlayout";
 import AvatarCard from "../../Components/shared/AvatarCard";
 import Table from "../../Components/shared/Table";
-import { DashBoardData } from "../../Constants/SempleChats";
+import { server } from "../../Constants/config";
+import { useErrors } from "../../Hooks/hook";
 import { transformImage } from "../../lib/Features";
 const columns = [
   {
@@ -24,6 +26,12 @@ const columns = [
     headerName: "Name",
     headerClassName: "table-header",
     width: 300,
+  },
+  {
+    field: "groupChat",
+    headerName: "Group",
+    headerClassName: "table-header",
+    width: 100,
   },
   {
     field: "totalMembers",
@@ -61,26 +69,45 @@ const columns = [
 ];
 
 const ChatManagement = () => {
-  const [rows, setrows] = useState([]);
+  const { loading, data, error } = useFetchData(
+    `${server}/api/v1/admin/chats`,
+    "dashbord-chats"
+  );
 
+  useErrors([
+    {
+      isError: error,
+      error: error,
+    },
+  ]);
+
+  const [rows, setrows] = useState([]);
+  
   useEffect(() => {
-    setrows(DashBoardData.chats.map((i) => ({
-      ...i,
-      id: i._id,
-      avatar:i.avatar.map((i)=>transformImage(i,50)),
-      members:i.members.map((i)=>transformImage(i.avatar,50)),
-      creator:{
-        name:i.creator.name,
-        avatar:transformImage(i.creator.avatar , 50)
-      }
-    })))
-      
-    
-  }, []);
+    if(data && data.chats){
+      setrows(
+        data.chats.map((i) => ({
+          ...i,
+          id: i._id,
+          avatar: i.avatar.map((i) => transformImage(i, 50)),
+          members: i.memebrs.map((i) => transformImage(i.avatar, 50)),
+          creator: {
+            name: i.creator.name,
+            avatar: transformImage(i.creator.avatar, 50),
+          },
+        }))
+      );
+    }
+  }, [data]);
 
   return (
     <Adminlayout>
-      <Table heading={"All Chats"} rows={rows} columns={columns} />
+      {loading ? (
+                <Skeleton width={"100vh"}/>
+
+      ) : (
+        <Table heading={"All Chats"} rows={rows} columns={columns} />
+      )}
     </Adminlayout>
   );
 };

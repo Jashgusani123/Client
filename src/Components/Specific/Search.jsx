@@ -39,10 +39,12 @@ const Search = () => {
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
-      searchUser(search.value)
+      // Check if search value is empty, and if so, retrieve all users
+      searchUser(search.value || "") 
         .then(({ data }) => setusers(data.user))
         .catch((err) => console.log(err));
     }, 1000);
+  
     return () => {
       clearTimeout(timeOutId);
     };

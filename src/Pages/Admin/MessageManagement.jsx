@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import Adminlayout from "../../Components/layout/Adminlayout";
-import Table from "../../Components/shared/Table";
-import { DashBoardData } from "../../Constants/SempleChats";
-import { fileFormat, transformImage } from "../../lib/Features";
-import { useEffect } from "react";
+import { useFetchData } from "6pp";
+import { Avatar, Box, Skeleton, Stack } from "@mui/material";
 import moment from "moment";
-import { Avatar, Box, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import Adminlayout from "../../Components/layout/Adminlayout";
 import Attachments from "../../Components/shared/Attachments";
-
+import Table from "../../Components/shared/Table";
+import { server } from "../../Constants/config";
+import { useErrors } from "../../Hooks/hook";
+import { fileFormat, transformImage } from "../../lib/Features";
 
 const columns = [
   {
@@ -71,7 +71,7 @@ const columns = [
     width: 220,
   },
   {
-    field: "groupsChat",
+    field: "groupChat",
     headerName: "Group Chat",
     headerClassName: "table-header",
     width: 100,
@@ -85,24 +85,47 @@ const columns = [
 ];
 
 const MessageManagement = () => {
+  const { loading, data, error } = useFetchData(
+    `${server}/api/v1/admin/messages`,
+    "dashbord-messages"
+  );
+
+  useErrors([
+    {
+      isError: error,
+      error: error,
+    },
+  ]);
+
   const [rows, setrows] = useState([]);
   useEffect(() => {
-    setrows(
-      DashBoardData.messages.map((i) => ({
-        ...i,
-        id: i._id,
-        sender: {
-          name: i.sender.name,
-          avatar: transformImage(i.sender.avatar, 50),
-        },
-        createdAt: moment(i.createdAt).format("MMMM Do YYYY, h:mm:ss a"),
-      }))
-    );
-  }, []);
+    if (data) {
+      setrows(
+        data.transformMessage.map((i) => ({
+          ...i,
+          id: i._id,
+          sender: {
+            name: i.sender.name,
+            avatar: transformImage(i.sender.avatar, 50),
+          },
+          createdAt: moment(i.createdAt).format("MMMM Do YYYY, h:mm:ss a"),
+        }))
+      );
+    }
+  }, [data]);
 
   return (
     <Adminlayout>
-      <Table heading={"All Messages"} rows={rows} columns={columns} rowHeight={150} />
+      {loading ? (
+        <Skeleton width={"100vh"} />
+      ) : (
+        <Table
+          heading={"All Messages"}
+          rows={rows}
+          columns={columns}
+          rowHeight={150}
+        />
+      )}
     </Adminlayout>
   );
 };

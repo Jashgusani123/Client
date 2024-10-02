@@ -84,6 +84,68 @@ const api = createApi({
       }),
       providesTags: ["Chat"],
     }),
+    availableFriends: builder.query({
+      query: (chatId) => {
+        let url = `user/friends`; 
+        if(chatId) url+=`?chatId=${chatId}`;
+        return {
+          url,
+          credentials: "include",
+        }
+      },
+      providesTags: ["Chat"],
+    }),
+    newGroup: builder.mutation({
+      query: ({name , members}) => ({
+        url: "chat/new",
+        method:"POST",
+        credentials: "include",
+        body:{name , members},
+      }),
+    }),
+    renameGroup: builder.mutation({
+      query: ({chatId , name}) => ({
+        url: `chat/${chatId}`,
+        method:"PUT",
+        credentials: "include",
+        body:{name}
+      }),
+      invalidatesTags:["Chat"]
+    }),
+    removeGroupMember: builder.mutation({
+      query: ({chatId , userId}) => ({
+        url: `chat/removemember`,
+        method:"DELETE",
+        credentials: "include",
+        body:{chatId , userId}
+      }),
+      invalidatesTags:["Chat"]
+    }),
+    addGroupMembers: builder.mutation({
+      query: ({members , chatId}) => ({
+        url: `chat/addmembers`,
+        method:"PUT",
+        credentials: "include",
+        body:{members , chatId}
+      }),
+      invalidatesTags:["Chat"]
+    }),
+    deleteChat: builder.mutation({
+      query: (chatId) => ({
+        url: `chat/${chatId}`,
+        method:"DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags:["Chat"]
+    }),
+    leaveGroup: builder.mutation({
+      query: (chatId) => ({
+        url: `chat/leave/${chatId}`,
+        method:"DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags:["Chat"]
+    }),
   }),
 });
 
@@ -91,11 +153,18 @@ export default api;
 export const {
   useMyChatsQuery,
   useMyGroupsQuery,
+  useNewGroupMutation,
   useChatDetailsQuery,
   useGetMessagesQuery,
+  useLeaveGroupMutation,
+  useDeleteChatMutation,
   useLazySearchUserQuery,
+  useRenameGroupMutation,
   useGetNotificationQuery,
+  useAvailableFriendsQuery,
   useSendAttachmentsMutation,
+  useAddGroupMembersMutation,
+  useRemoveGroupMemberMutation,
   useSendFriendRequestMutation,
   useAcceptFriendrequestMutation,
 } = api;
